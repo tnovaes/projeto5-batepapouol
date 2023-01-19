@@ -1,5 +1,13 @@
 let user = {};
 
+function login(){
+    user.name = prompt("Digite seu nome:");
+    while(!user.name){
+        user.name = prompt("Não deixe o espaço vazio:")
+    }
+    validation();
+}
+
 function validation(){
     const promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/participants", user);
     promise.then(successValidation);
@@ -19,14 +27,6 @@ function errorValidation(err){
     user.name = prompt("Esse nome já está sendo utilizado, escolha outro:");
     validation();
 
-}
-
-function login(){
-    user.name = prompt("Digite seu nome:");
-    while(user.name === "" || null){
-        user.name = prompt("Não deixe o espaço vazio:")
-    }
-    validation();
 }
 
 function checkStatus(){
@@ -52,6 +52,7 @@ function successMessages(succ){
     
     timeline.innerHTML = "";
     for(let i = 0; i < msg.length; i++){
+
         if(msg[i].type === "status"){  
             timeline.innerHTML += `
             <div data-test="message" class="text status">
@@ -61,18 +62,19 @@ function successMessages(succ){
         } else if(msg[i].type === "message"){
             timeline.innerHTML += `
             <div data-test="message" class="text message">
-                <span class="time">(${msg[i].time})</span> <span class="nome">${msg[i].from}</span>&nbsp;para&nbsp;<span class="nome">${msg[i].to}:</span>&nbsp;${msg[i].text}
+                <span class="time">(${msg[i].time})</span>&nbsp;<span class="nome">${msg[i].from}</span>&nbsp;para&nbsp;<span class="nome">${msg[i].to}:</span>&nbsp;${msg[i].text}
             </div>
             `
         } else if(msg[i].type === "private_message" && (user.name === msg[i].from || user.name === msg[i].to)){
             timeline.innerHTML += `
             <div data-test="message" class="text private">
-                <span class="time">(${msg[i].time})</span> <span class="nome">${msg[i].from}</span>&nbsp;para&nbsp;<span class="nome">${msg[i].to}:</span>&nbsp;${msg[i].text}
+                <span class="time">(${msg[i].time})</span>&nbsp;<span class="nome">${msg[i].from}</span>&nbsp;para&nbsp;<span class="nome">${msg[i].to}:</span>&nbsp;${msg[i].text}
             </div>
             `
         }
-        timeline.scrollIntoView({block: "end"});
     }
+    const lastmsg = document.querySelector(".container .text:last-child")
+    lastmsg.scrollIntoView();
 
 }
 
