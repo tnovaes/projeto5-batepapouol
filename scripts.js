@@ -10,6 +10,7 @@ function successValidation(succ){
     console.log(succ);
     alert("Você entrou na sala");
     setInterval(checkStatus, 5000);
+    setInterval(getMessages, 3000);
 }
 
 function errorValidation(err){
@@ -48,19 +49,19 @@ function successMessages(succ){
     for(let i = 0; i < msg.length; i++){
         if(msg[i].type === "status"){  
             timeline.innerHTML += `
-            <div class="text status">
+            <div data-test="message" class="text status">
                 <span class="time">${msg[i].time}</span>&nbsp;<span class="nome">${msg[i].from}</span>&nbsp;${msg[i].text}
             </div>
             `
         } else if(msg[i].type === "message"){
             timeline.innerHTML += `
-            <div class="text message">
+            <div data-test="message" class="text message">
                 <span class="time">${msg[i].time}</span> <span class="nome">${msg[i].from}</span>&nbsp;para&nbsp;<span class="nome">${msg[i].to}</span>:&nbsp;${msg[i].text}
             </div>
             `
         } else if(msg[i].type === "private_message"){
             timeline.innerHTML += `
-            <div class="text private">
+            <div data-test="message" class="text private">
                 <span class="time">(${msg[i].time})</span> <span class="nome">${msg[i].from}</span>&nbsp;para&nbsp;<span class="nome">${msg[i].to}</span>:&nbsp;${msg[i].text}
             </div>
             `
@@ -74,6 +75,4 @@ function errorMessages(err){
 }
 
 login();
-checkStatus();
-getMessages();
-setInterval(getMessages, 3000);
+
