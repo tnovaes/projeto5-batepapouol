@@ -2,11 +2,11 @@ let user = {};
 
 function validation(){
     const promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/participants", user);
-    promise.then(success);
+    promise.then(successValidation);
     promise.catch(errorValidation);
 }
 
-function success(succ){
+function successValidation(succ){
     console.log(succ);
     alert("Você entrou na sala");
     setInterval(checkStatus, 5000);
@@ -32,8 +32,48 @@ function checkStatus(){
 }
 
 function errorStatus(err){
-    //saiu da sala
+    console.log(err);
+}
+
+function getMessages(){
+    axios.get("https://mock-api.driven.com.br/api/v6/uol/messages")
+    .then(successMessages)
+    .catch(errorMessages);
+}
+
+function successMessages(succ){
+    const msg = succ.data;
+    let timeline = document.querySelector(".container");
+    timeline.innerHTML = "";
+    for(let i = 0; i < msg.length; i++){
+        if(msg[i].type === "status"){  
+            timeline.innerHTML += `
+            <div class="text status">
+                <span class="time">${msg[i].time}</span>&nbsp;<span class="nome">${msg[i].from}</span>&nbsp;${msg[i].text}
+            </div>
+            `
+        } else if(msg[i].type === "message"){
+            timeline.innerHTML += `
+            <div class="text message">
+                <span class="time">${msg[i].time}</span> <span class="nome">${msg[i].from}</span>&nbsp;para&nbsp;<span class="nome">${msg[i].to}</span>:&nbsp;${msg[i].text}
+            </div>
+            `
+        } else if(msg[i].type === "private_message"){
+            timeline.innerHTML += `
+            <div class="text private">
+                <span class="time">(${msg[i].time})</span> <span class="nome">${msg[i].from}</span>&nbsp;para&nbsp;<span class="nome">${msg[i].to}</span>:&nbsp;${msg[i].text}
+            </div>
+            `
+        } 
+        
+    }
+}
+
+function errorMessages(err){
+    console.log(err);
 }
 
 login();
 checkStatus();
+getMessages();
+setInterval(getMessages, 3000);
