@@ -1,4 +1,5 @@
 let user = {};
+let message = {};
 
 function login(){
     user.name = prompt("Digite seu nome:");
@@ -14,8 +15,8 @@ function validation(){
     promise.catch(errorValidation);
 }
 
-function successValidation(succ){
-    console.log(succ);
+function successValidation(scc){
+    console.log(scc);
     alert("Você entrou na sala");
     getMessages();
     setInterval(checkStatus, 5000);
@@ -38,6 +39,7 @@ function checkStatus(){
 
 function errorStatus(err){
     console.log(err);
+    alert("Você foi desconectado.")
 }
 
 function getMessages(){
@@ -46,29 +48,29 @@ function getMessages(){
     .catch(errorMessages);
 }
 
-function successMessages(succ){
-    const msg = succ.data;
-    let timeline = document.querySelector(".container");
+function successMessages(scc){
+    const msg = scc.data;
+    let chat = document.querySelector(".container");
     
-    timeline.innerHTML = "";
+    chat.innerHTML = "";
     for(let i = 0; i < msg.length; i++){
 
         if(msg[i].type === "status"){  
-            timeline.innerHTML += `
-            <div data-test="message" class="text status">
+            chat.innerHTML += `
+            <div data-test="message" class="text ${msg[i].type}">
                 <span class="time">(${msg[i].time})</span>&nbsp;<span class="nome">${msg[i].from}</span>&nbsp;${msg[i].text}
             </div>
             `
         } else if(msg[i].type === "message"){
-            timeline.innerHTML += `
-            <div data-test="message" class="text message">
+            chat.innerHTML += `
+            <div data-test="message" class="text ${msg[i].type}">
                 <span class="time">(${msg[i].time})</span>&nbsp;<span class="nome">${msg[i].from}</span>&nbsp;para&nbsp;<span class="nome">${msg[i].to}:</span>&nbsp;${msg[i].text}
             </div>
             `
         } else if(msg[i].type === "private_message" && (user.name === msg[i].from || user.name === msg[i].to)){
-            timeline.innerHTML += `
-            <div data-test="message" class="text private">
-                <span class="time">(${msg[i].time})</span>&nbsp;<span class="nome">${msg[i].from}</span>&nbsp;para&nbsp;<span class="nome">${msg[i].to}:</span>&nbsp;${msg[i].text}
+            chat.innerHTML += `
+            <div data-test="message" class="text ${msg[i].type}">
+                <span class="time">(${msg[i].time})</span>&nbsp;<span class="nome">${msg[i].from}</span>&nbsp;reservadamente&nbsp;para&nbsp;<span class="nome">${msg[i].to}:</span>&nbsp;${msg[i].text}
             </div>
             `
         }
@@ -80,7 +82,38 @@ function successMessages(succ){
 
 function errorMessages(err){
     console.log(err);
+    alert("Não foi possível atualizar as mensagens do chat.");
 }
+
+function sendMessages(){
+    const input = document.querySelector(".msg").value;
+    message = {
+        from: user.name,
+	to: "Todos",
+	text: input,
+	type: "message"
+    };
+    postMessages();
+    
+}
+
+function postMessages(){
+    const promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/messages", message);
+    promise.then(successPostMessages)
+    promise.catch(errorPostMessages);
+}
+
+function successPostMessages(scc){
+    console.log(scc);
+    const input = document.querySelector(".msg").value ="";
+}
+
+function errorPostMessages(err){
+    console.log(err);
+    alert("Não foi possível enviar sua mensagem para o chat.");
+}
+
+
 
 login();
 

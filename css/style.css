@@ -60,7 +60,7 @@ header img {
     background-color: #FFFFFF;
 }
 
-.private {
+.private_message {
     background-color: #FFDEDE;
 }
 
@@ -98,3 +98,8 @@ input {
     outline: none;
     margin-right: 15px;
 }
+
+ion-icon{
+    cursor:pointer;   
+}
+
