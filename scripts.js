@@ -1,10 +1,10 @@
-let user = {};
+const user = {};
 let message = {};
 
 function login() {
     user.name = prompt("Digite seu nome:");
     while (!user.name) {
-        user.name = prompt("Não deixe o espaço vazio:")
+        user.name = prompt("Não deixe o espaço vazio:");
     }
     validation();
 }
@@ -39,7 +39,7 @@ function checkStatus() {
 
 function errorStatus(err) {
     console.log(err);
-    alert("Você foi desconectado.")
+    alert("Você foi desconectado.");
 }
 
 function getMessages() {
@@ -50,7 +50,7 @@ function getMessages() {
 
 function successMessages(scc) {
     const msg = scc.data;
-    let chat = document.querySelector(".container");
+    const chat = document.querySelector(".container");
 
     chat.innerHTML = "";
     for (let i = 0; i < msg.length; i++) {
@@ -58,24 +58,31 @@ function successMessages(scc) {
         if (msg[i].type === "status") {
             chat.innerHTML += `
             <div data-test="message" class="text ${msg[i].type}">
-                <span class="time">(${msg[i].time})</span>&nbsp;<span class="nome">${msg[i].from}</span>&nbsp;${msg[i].text}
+                <span class="time">(${msg[i].time})</span>&nbsp;
+                <span class="nome">${msg[i].from}</span>&nbsp;${msg[i].text}
             </div>
-            `
+            `;
         } else if (msg[i].type === "message") {
             chat.innerHTML += `
             <div data-test="message" class="text ${msg[i].type}">
-                <span class="time">(${msg[i].time})</span>&nbsp;<span class="nome">${msg[i].from}</span>&nbsp;para&nbsp;<span class="nome">${msg[i].to}:</span>&nbsp;${msg[i].text}
+                <span class="time">(${msg[i].time})</span>&nbsp;
+                <span class="nome">${msg[i].from}</span>&nbsp;
+                para&nbsp;
+                <span class="nome">${msg[i].to}:</span>&nbsp;${msg[i].text}
             </div>
-            `
+            `;
         } else if (msg[i].type === "private_message" && (user.name === msg[i].from || user.name === msg[i].to)) {
             chat.innerHTML += `
             <div data-test="message" class="text ${msg[i].type}">
-                <span class="time">(${msg[i].time})</span>&nbsp;<span class="nome">${msg[i].from}</span>&nbsp;reservadamente&nbsp;para&nbsp;<span class="nome">${msg[i].to}:</span>&nbsp;${msg[i].text}
+                <span class="time">(${msg[i].time})</span>&nbsp;
+                <span class="nome">${msg[i].from}</span>&nbsp;
+                reservadamente&nbsp;para&nbsp;
+                <span class="nome">${msg[i].to}:</span>&nbsp;${msg[i].text}
             </div>
-            `
+            `;
         }
     }
-    const lastmsg = document.querySelector(".container .text:last-child")
+    const lastmsg = document.querySelector(".container .text:last-child");
     lastmsg.scrollIntoView();
 
 }
@@ -99,14 +106,14 @@ function sendMessages() {
 
 function postMessages() {
     const promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/messages", message);
-    promise.then(successPostMessages)
+    promise.then(successPostMessages);
     promise.catch(errorPostMessages);
 }
 
 function successPostMessages(scc) {
     console.log(scc);
     getMessages();
-    const input = document.querySelector(".msg").value = "";
+    document.querySelector(".msg").value = "";
 }
 
 function errorPostMessages(err) {
