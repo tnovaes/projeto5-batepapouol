@@ -105,12 +105,13 @@ function postMessages() {
 
 function successPostMessages(scc) {
     console.log(scc);
+    getMessages();
     const input = document.querySelector(".msg").value = "";
 }
 
 function errorPostMessages(err) {
     console.log(err);
-    alert("Não foi possível enviar sua mensagem para o chat.");
+    window.location.reload();
 }
 
 
