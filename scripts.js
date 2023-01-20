@@ -1,21 +1,21 @@
 let user = {};
 let message = {};
 
-function login(){
+function login() {
     user.name = prompt("Digite seu nome:");
-    while(!user.name){
+    while (!user.name) {
         user.name = prompt("Não deixe o espaço vazio:")
     }
     validation();
 }
 
-function validation(){
+function validation() {
     const promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/participants", user);
     promise.then(successValidation);
     promise.catch(errorValidation);
 }
 
-function successValidation(scc){
+function successValidation(scc) {
     console.log(scc);
     alert("Você entrou na sala");
     getMessages();
@@ -23,51 +23,51 @@ function successValidation(scc){
     setInterval(getMessages, 3000);
 }
 
-function errorValidation(err){
+function errorValidation(err) {
     console.log(err);
     user.name = prompt("Esse nome já está sendo utilizado, escolha outro:");
     validation();
 
 }
 
-function checkStatus(){
+function checkStatus() {
     axios
-    .post("https://mock-api.driven.com.br/api/v6/uol/status", user)
-    .catch(errorStatus);
+        .post("https://mock-api.driven.com.br/api/v6/uol/status", user)
+        .catch(errorStatus);
 
 }
 
-function errorStatus(err){
+function errorStatus(err) {
     console.log(err);
     alert("Você foi desconectado.")
 }
 
-function getMessages(){
+function getMessages() {
     axios.get("https://mock-api.driven.com.br/api/v6/uol/messages")
-    .then(successMessages)
-    .catch(errorMessages);
+        .then(successMessages)
+        .catch(errorMessages);
 }
 
-function successMessages(scc){
+function successMessages(scc) {
     const msg = scc.data;
     let chat = document.querySelector(".container");
-    
-    chat.innerHTML = "";
-    for(let i = 0; i < msg.length; i++){
 
-        if(msg[i].type === "status"){  
+    chat.innerHTML = "";
+    for (let i = 0; i < msg.length; i++) {
+
+        if (msg[i].type === "status") {
             chat.innerHTML += `
             <div data-test="message" class="text ${msg[i].type}">
                 <span class="time">(${msg[i].time})</span>&nbsp;<span class="nome">${msg[i].from}</span>&nbsp;${msg[i].text}
             </div>
             `
-        } else if(msg[i].type === "message"){
+        } else if (msg[i].type === "message") {
             chat.innerHTML += `
             <div data-test="message" class="text ${msg[i].type}">
                 <span class="time">(${msg[i].time})</span>&nbsp;<span class="nome">${msg[i].from}</span>&nbsp;para&nbsp;<span class="nome">${msg[i].to}:</span>&nbsp;${msg[i].text}
             </div>
             `
-        } else if(msg[i].type === "private_message" && (user.name === msg[i].from || user.name === msg[i].to)){
+        } else if (msg[i].type === "private_message" && (user.name === msg[i].from || user.name === msg[i].to)) {
             chat.innerHTML += `
             <div data-test="message" class="text ${msg[i].type}">
                 <span class="time">(${msg[i].time})</span>&nbsp;<span class="nome">${msg[i].from}</span>&nbsp;reservadamente&nbsp;para&nbsp;<span class="nome">${msg[i].to}:</span>&nbsp;${msg[i].text}
@@ -80,35 +80,35 @@ function successMessages(scc){
 
 }
 
-function errorMessages(err){
+function errorMessages(err) {
     console.log(err);
     alert("Não foi possível atualizar as mensagens do chat.");
 }
 
-function sendMessages(){
+function sendMessages() {
     const input = document.querySelector(".msg").value;
     message = {
         from: user.name,
-	to: "Todos",
-	text: input,
-	type: "message"
+        to: "Todos",
+        text: input,
+        type: "message"
     };
     postMessages();
-    
+
 }
 
-function postMessages(){
+function postMessages() {
     const promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/messages", message);
     promise.then(successPostMessages)
     promise.catch(errorPostMessages);
 }
 
-function successPostMessages(scc){
+function successPostMessages(scc) {
     console.log(scc);
-    const input = document.querySelector(".msg").value ="";
+    const input = document.querySelector(".msg").value = "";
 }
 
-function errorPostMessages(err){
+function errorPostMessages(err) {
     console.log(err);
     alert("Não foi possível enviar sua mensagem para o chat.");
 }
