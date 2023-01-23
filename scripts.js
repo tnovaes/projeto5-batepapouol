@@ -1,6 +1,7 @@
 const user = {};
 let message = {};
 
+
 function login() {
     user.name = prompt("Digite seu nome:");
     while (!user.name) {
@@ -93,7 +94,8 @@ function errorMessages(err) {
 }
 
 function sendMessages() {
-    const input = document.querySelector(".msg").value;
+    let input = document.querySelector(".msg").value;
+    if(input !== ""){
     message = {
         from: user.name,
         to: "Todos",
@@ -101,7 +103,7 @@ function sendMessages() {
         type: "message"
     };
     postMessages();
-
+    }
 }
 
 function postMessages() {
