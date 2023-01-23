@@ -67,8 +67,7 @@ function successMessages(scc) {
             chat.innerHTML += `
             <div data-test="message" class="text ${msg[i].type}">
                 <span class="time">(${msg[i].time})</span>&nbsp;
-                <span class="nome">${msg[i].from}</span>&nbsp;
-                para&nbsp;
+                <span class="nome">${msg[i].from}</span>&nbsp;para&nbsp;
                 <span class="nome">${msg[i].to}:</span>&nbsp;${msg[i].text}
             </div>
             `;
@@ -76,8 +75,7 @@ function successMessages(scc) {
             chat.innerHTML += `
             <div data-test="message" class="text ${msg[i].type}">
                 <span class="time">(${msg[i].time})</span>&nbsp;
-                <span class="nome">${msg[i].from}</span>&nbsp;
-                reservadamente&nbsp;para&nbsp;
+                <span class="nome">${msg[i].from}</span>&nbsp;reservadamente&nbsp;para&nbsp;
                 <span class="nome">${msg[i].to}:</span>&nbsp;${msg[i].text}
             </div>
             `;
@@ -94,7 +92,7 @@ function errorMessages(err) {
 }
 
 function sendMessages() {
-    let input = document.querySelector(".msg").value;
+    const input = document.querySelector(".msg").value;
     if(input !== ""){
     message = {
         from: user.name,
